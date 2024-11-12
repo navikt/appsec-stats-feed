@@ -12,6 +12,14 @@ jobs:
     environment: prod-gcp:appsec
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # ratchet:actions/checkout@v4
+      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # ratchet:actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - uses: nais/docker-build-push@5246e4705d79945a0ec28eb9bd3638dd534fee46 # ratchet:nais/docker-build-push@v0
         id: docker-push
         with:
