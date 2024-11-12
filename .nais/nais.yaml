@@ -32,5 +32,7 @@ spec:
     bigQueryDatasets:
       - name: appsec
         permission: READWRITE
+  envFrom:
+    - secret: appsec-stats-feed
   ingresses:
     - https://appsec-stats-feed.nav.no
