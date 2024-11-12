@@ -83,6 +83,7 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		logError("Invalid request method", nil)
 		return
 	}
 
@@ -90,28 +91,33 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	signature := r.Header.Get("X-Hub-Signature-256")
 	if signature == "" {
 		http.Error(w, "Missing HMAC signature", http.StatusUnauthorized)
+		logError("Missing HMAC signature", nil)
 		return
 	}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		logError("Error reading request body", err)
 		return
 	}
 
 	if !validateHMAC(body, signature, secretKey) {
 		http.Error(w, "Invalid HMAC signature", http.StatusUnauthorized)
+		logError("Invalid HMAC signature", nil)
 		return
 	}
 
 	var m GitHubPayload
 	if err := json.Unmarshal(body, &m); err != nil {
 		http.Error(w, "Error decoding JSON", http.StatusBadRequest)
+		logError("Error decoding JSON", err)
 		return
 	}
 
 	// Insert the data into BigQuery
 	if err := inserter.Put(r.Context(), &m); err != nil {
 		http.Error(w, "Error inserting data into BigQuery", http.StatusInternalServerError)
+		logError("Error inserting data into BigQuery", err)
 		return
 	}
 
@@ -162,4 +168,13 @@ func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bi
 	}
 
 	return tableRef, nil
+}
+
+func logError(message string, err error) {
+	logEntry := map[string]interface{}{
+		"message": message,
+		"error":   err.Error(),
+	}
+	logEntryJSON, _ := json.Marshal(logEntry)
+	fmt.Println(string(logEntryJSON))
 }
