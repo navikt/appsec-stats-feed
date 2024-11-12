@@ -12,16 +12,8 @@ import (
 	"os"
 
 	"cloud.google.com/go/bigquery"
-	"golang.org/x/xerrors"
 	"google.golang.org/api/googleapi"
 )
-
-type mesg struct {
-	StringValue    string `json:"stringValue"`
-	BooleanValue   bool   `json:"booleanValue"`
-	NumericValue   int    `json:"numericValue"`
-	TimestampValue string `json:"timestampValue"`
-}
 
 type GitHubPayload struct {
 	Action     string `json:"action"`
@@ -111,7 +103,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var m mesg
+	var m GitHubPayload
 	if err := json.Unmarshal(body, &m); err != nil {
 		http.Error(w, "Error decoding JSON", http.StatusBadRequest)
 		return
@@ -160,8 +152,7 @@ func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bi
 
 	tableRef := bqClient.Dataset(datasetID).Table(tableName)
 	if err := tableRef.Create(ctx, metadata); err != nil {
-		var e *googleapi.Error
-		if ok := xerrors.As(err, &e); ok {
+		if e, ok := err.(*googleapi.Error); ok {
 			if e.Code == 409 {
 				// already exists
 				return tableRef, nil
