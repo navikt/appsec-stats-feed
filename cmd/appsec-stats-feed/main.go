@@ -61,25 +61,6 @@ func (t ISO8601Time) MarshalJSON() ([]byte, error) {
 	return json.Marshal(t.Time.Format("2006-01-02T15:04:05Z"))
 }
 
-func (p GitHubPayload) MarshalJSON() ([]byte, error) {
-	type Alias GitHubPayload
-	return json.Marshal(&struct {
-		CreatedAt       string `json:"created_at"`
-		UpdatedAt       string `json:"updated_at"`
-		DismissedAt     string `json:"dismissed_at"`
-		FixedAt         string `json:"fixed_at"`
-		AutoDismissedAt string `json:"auto_dismissed_at"`
-		Alias
-	}{
-		CreatedAt:       p.Alert.CreatedAt.Format("2006-01-02T15:04:05Z"),
-		UpdatedAt:       p.Alert.UpdatedAt.Format("2006-01-02T15:04:05Z"),
-		DismissedAt:     p.Alert.DismissedAt.Format("2006-01-02T15:04:05Z"),
-		FixedAt:         p.Alert.FixedAt.Format("2006-01-02T15:04:05Z"),
-		AutoDismissedAt: p.Alert.AutoDismissedAt.Format("2006-01-02T15:04:05Z"),
-		Alias:           (Alias)(p),
-	})
-}
-
 const (
 	topicName = "appsec-stats-feed"
 	tableName = "appsec_stats_feed"
