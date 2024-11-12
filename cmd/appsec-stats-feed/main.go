@@ -156,19 +156,19 @@ func validateHMAC(body []byte, signature, secretKey string) bool {
 
 func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bigquery.Table, error) {
 	schema := bigquery.Schema{
-		{Name: "action", Type: bigquery.StringFieldType},
-		{Name: "alert", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
-			{Name: "state", Type: bigquery.StringFieldType},
-			{Name: "severity", Type: bigquery.StringFieldType},
-			{Name: "created_at", Type: bigquery.TimestampFieldType},
-			{Name: "updated_at", Type: bigquery.TimestampFieldType},
-			{Name: "dismissed_at", Type: bigquery.TimestampFieldType, Required: false},
-			{Name: "fixed_at", Type: bigquery.TimestampFieldType, Required: false},
-			{Name: "auto_dismissed_at", Type: bigquery.TimestampFieldType, Required: false},
+		{Name: "Action", Type: bigquery.StringFieldType},
+		{Name: "Alert", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
+			{Name: "State", Type: bigquery.StringFieldType},
+			{Name: "Severity", Type: bigquery.StringFieldType},
+			{Name: "CreatedAt", Type: bigquery.TimestampFieldType},
+			{Name: "UpdatedAt", Type: bigquery.TimestampFieldType},
+			{Name: "DismissedAt", Type: bigquery.TimestampFieldType, Required: false},
+			{Name: "FixedAt", Type: bigquery.TimestampFieldType, Required: false},
+			{Name: "AutoDismissedAt", Type: bigquery.TimestampFieldType, Required: false},
 		}},
-		{Name: "repository", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
-			{Name: "name", Type: bigquery.StringFieldType},
-			{Name: "archived", Type: bigquery.BooleanFieldType},
+		{Name: "Repository", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
+			{Name: "Name", Type: bigquery.StringFieldType},
+			{Name: "Archived", Type: bigquery.BooleanFieldType},
 		}},
 	}
 
