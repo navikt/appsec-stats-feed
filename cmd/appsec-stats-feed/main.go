@@ -138,6 +138,8 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	if err := inserter.Put(r.Context(), &m); err != nil {
 		http.Error(w, "Error inserting data into BigQuery", http.StatusInternalServerError)
 		logError("Error inserting data into BigQuery", err)
+		logEntry, _ := json.Marshal(m)
+		fmt.Println(string(logEntry))
 		return
 	}
 
