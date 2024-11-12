@@ -1,0 +1,36 @@
+apiVersion: nais.io/v1
+kind: Application
+metadata:
+  labels:
+    team: appsec
+  name: appsec-stats-feed
+  namespace: appsec
+spec:
+  image: "{{ image }}"
+  port: 8080
+  azure:
+    application:
+      enabled: true
+  replicas:
+    min: 2
+    max: 2
+    cpuThresholdPercentage: 90
+  resources:
+    limits:
+      cpu: "300m"
+      memory: "512Mi"
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+  liveness:
+    initialDelay: 30
+    path: isalive
+  readiness:
+    initialDelay: 30
+    path: isready
+  gcp:
+    bigQueryDatasets:
+      - name: appsec
+        permission: READWRITE
+  ingresses:
+    - https://appsec-stats-feed.nav.no

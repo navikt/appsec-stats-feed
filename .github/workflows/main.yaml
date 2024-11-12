@@ -1,0 +1,27 @@
+name: Build and deploy main
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    environment: prod-gcp:appsec
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # ratchet:actions/checkout@v4
+      - uses: nais/docker-build-push@5246e4705d79945a0ec28eb9bd3638dd534fee46 # ratchet:nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: appsec
+          push_image: true
+          pull: true
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+      #- uses: nais/deploy/actions/deploy@2325c1546a8592c0ca3d2fd43ed5128cca04bedb # ratchet:nais/deploy/actions/deploy@v2
+      #  env:
+      #    RESOURCE: .nais/nais.yaml
+      #    CLUSTER: prod-gcp
+      #    IMAGE: ${{ steps.docker-push.outputs.image }}
