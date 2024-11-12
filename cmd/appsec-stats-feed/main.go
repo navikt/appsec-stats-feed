@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 
 	"cloud.google.com/go/bigquery"
 	"google.golang.org/api/googleapi"
@@ -22,18 +23,42 @@ type GitHubPayload struct {
 }
 
 type Alert struct {
-	State           string  `json:"state"`
-	Severity        string  `json:"severity"`
-	CreatedAt       string  `json:"created_at"`
-	UpdatedAt       string  `json:"updated_at"`
-	DismissedAt     *string `json:"dismissed_at"`
-	FixedAt         *string `json:"fixed_at"`
-	AutoDismissedAt *string `json:"auto_dismissed_at"`
+	State           string       `json:"state"`
+	Severity        string       `json:"severity"`
+	CreatedAt       ISO8601Time  `json:"created_at"`
+	UpdatedAt       *ISO8601Time `json:"updated_at"`
+	DismissedAt     *ISO8601Time `json:"dismissed_at"`
+	FixedAt         *ISO8601Time `json:"fixed_at"`
+	AutoDismissedAt *ISO8601Time `json:"auto_dismissed_at"`
 }
 
 type Repo struct {
 	Name     string `json:"name"`
 	Archived bool   `json:"archived"`
+}
+
+type ISO8601Time struct {
+	time.Time
+}
+
+func (t *ISO8601Time) UnmarshalJSON(data []byte) error {
+	str := string(data)
+	if str == "null" {
+		return nil
+	}
+	parsedTime, err := time.Parse(`"2006-01-02T15:04:05Z"`, str)
+	if err != nil {
+		return err
+	}
+	t.Time = parsedTime
+	return nil
+}
+
+func (t ISO8601Time) MarshalJSON() ([]byte, error) {
+	if t.Time.IsZero() {
+		return []byte("null"), nil
+	}
+	return json.Marshal(t.Time.Format("2006-01-02T15:04:05Z"))
 }
 
 const (
@@ -73,11 +98,6 @@ func main() {
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		panic(err)
 	}
-}
-
-func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
 }
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
@@ -168,6 +188,11 @@ func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bi
 	}
 
 	return tableRef, nil
+}
+
+func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
 }
 
 func logError(message string, err error) {
