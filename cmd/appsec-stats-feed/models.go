@@ -18,10 +18,10 @@ type GitHubPayload struct {
 type Alert struct {
 	State                 string                 `json:"state" bigquery:"state"`
 	SecurityVulnerability SecurityVulnerability  `json:"security_vulnerability" bigquery:"security_vulnerability"`
-	Severity              string                 `json:"severity" bigquery:"severity"`
 	CreatedAt             bigquery.NullTimestamp `json:"created_at" bigquery:"created_at"`
 	UpdatedAt             bigquery.NullTimestamp `json:"updated_at" bigquery:"updated_at"`
 	DismissedAt           bigquery.NullTimestamp `json:"dismissed_at" bigquery:"dismissed_at"`
+	DismissedReason       string                 `json:"dismissed_reason" bigquery:"dismissed_reason"`
 	FixedAt               bigquery.NullTimestamp `json:"fixed_at" bigquery:"fixed_at"`
 	AutoDismissedAt       bigquery.NullTimestamp `json:"auto_dismissed_at" bigquery:"auto_dismissed_at"`
 }
