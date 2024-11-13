@@ -18,6 +18,7 @@ import (
 
 type GitHubPayload struct {
 	Action     string `json:"action" bigquery:"action"`
+	Event      string `json:"event" bigquery:"event"`
 	Alert      Alert  `json:"alert" bigquery:"alert"`
 	Repository Repo   `json:"repository" bigquery:"repository"`
 }
@@ -172,6 +173,9 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Set the Event field from the X-GitHub-Event header
+	m.Event = r.Header.Get("X-GitHub-Event")
+
 	// Insert the data into BigQuery
 	if err := inserter.Put(r.Context(), &m); err != nil {
 		http.Error(w, "Error inserting data into BigQuery", http.StatusInternalServerError)
@@ -183,7 +187,6 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Received and inserted message: %+v\n", m)
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Message received and inserted"))
 }
 
 func validateHMAC(body []byte, signature, secretKey string) bool {
@@ -197,6 +200,7 @@ func validateHMAC(body []byte, signature, secretKey string) bool {
 func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bigquery.Table, error) {
 	schema := bigquery.Schema{
 		{Name: "action", Type: bigquery.StringFieldType},
+		{Name: "event", Type: bigquery.StringFieldType},
 		{Name: "alert", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
 			{Name: "state", Type: bigquery.StringFieldType},
 			{Name: "severity", Type: bigquery.StringFieldType},
