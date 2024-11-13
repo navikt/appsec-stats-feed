@@ -46,7 +46,7 @@ func (t *ISO8601Time) UnmarshalJSON(data []byte) error {
 	if str == "null" {
 		return nil
 	}
-	parsedTime, err := time.Parse(`"2006-01-02T15:04:05Z"`, str)
+	parsedTime, err := time.Parse(`"2006-01-02T15:04:05Z07:00"`, str)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (t ISO8601Time) MarshalJSON() ([]byte, error) {
 	if t.Time.IsZero() {
 		return []byte("null"), nil
 	}
-	return json.Marshal(t.Time.Format("2006-01-02T15:04:05Z"))
+	return json.Marshal(t.Time.Format(time.RFC3339))
 }
 
 const (
