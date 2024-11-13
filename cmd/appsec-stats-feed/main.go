@@ -23,13 +23,13 @@ type GitHubPayload struct {
 }
 
 type Alert struct {
-	State           string       `json:"state" bigquery:"state"`
-	Severity        string       `json:"severity" bigquery:"severity"`
-	CreatedAt       ISO8601Time  `json:"created_at" bigquery:"created_at"`
-	UpdatedAt       *ISO8601Time `json:"updated_at" bigquery:"updated_at"`
-	DismissedAt     *ISO8601Time `json:"dismissed_at" bigquery:"dismissed_at"`
-	FixedAt         *ISO8601Time `json:"fixed_at" bigquery:"fixed_at"`
-	AutoDismissedAt *ISO8601Time `json:"auto_dismissed_at" bigquery:"auto_dismissed_at"`
+	State           string     `json:"state" bigquery:"state"`
+	Severity        string     `json:"severity" bigquery:"severity"`
+	CreatedAt       time.Time  `json:"created_at" bigquery:"created_at"`
+	UpdatedAt       *time.Time `json:"updated_at" bigquery:"updated_at"`
+	DismissedAt     *time.Time `json:"dismissed_at" bigquery:"dismissed_at"`
+	FixedAt         *time.Time `json:"fixed_at" bigquery:"fixed_at"`
+	AutoDismissedAt *time.Time `json:"auto_dismissed_at" bigquery:"auto_dismissed_at"`
 }
 
 type Repo struct {
@@ -37,28 +37,61 @@ type Repo struct {
 	Archived bool   `json:"archived" bigquery:"archived"`
 }
 
-type ISO8601Time struct {
-	time.Time
-}
-
-func (t *ISO8601Time) UnmarshalJSON(data []byte) error {
-	str := string(data)
-	if str == "null" {
-		return nil
+// Implement custom unmarshaling for Alert
+func (a *Alert) UnmarshalJSON(data []byte) error {
+	type Alias Alert
+	aux := &struct {
+		CreatedAt       string  `json:"created_at"`
+		UpdatedAt       *string `json:"updated_at"`
+		DismissedAt     *string `json:"dismissed_at"`
+		FixedAt         *string `json:"fixed_at"`
+		AutoDismissedAt *string `json:"auto_dismissed_at"`
+		*Alias
+	}{
+		Alias: (*Alias)(a),
 	}
-	parsedTime, err := time.Parse(`"2006-01-02T15:04:05Z07:00"`, str)
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	var err error
+	a.CreatedAt, err = parseTime(aux.CreatedAt)
 	if err != nil {
 		return err
 	}
-	t.Time = parsedTime
+	a.UpdatedAt, err = parseNullableTime(aux.UpdatedAt)
+	if err != nil {
+		return err
+	}
+	a.DismissedAt, err = parseNullableTime(aux.DismissedAt)
+	if err != nil {
+		return err
+	}
+	a.FixedAt, err = parseNullableTime(aux.FixedAt)
+	if err != nil {
+		return err
+	}
+	a.AutoDismissedAt, err = parseNullableTime(aux.AutoDismissedAt)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func (t ISO8601Time) MarshalJSON() ([]byte, error) {
-	if t.Time.IsZero() {
-		return []byte("null"), nil
+func parseTime(s string) (time.Time, error) {
+	return time.Parse(time.RFC3339, s)
+}
+
+func parseNullableTime(s *string) (*time.Time, error) {
+	if s == nil || *s == "" {
+		return nil, nil
 	}
-	return json.Marshal(t.Time.Format(time.RFC3339))
+	t, err := time.Parse(time.RFC3339, *s)
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
 }
 
 const (
@@ -127,6 +160,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Unmarshal the JSON to ensure it's valid and to convert it to the appropriate struct
 	var m GitHubPayload
 	if err := json.Unmarshal(body, &m); err != nil {
 		http.Error(w, "Error decoding JSON", http.StatusBadRequest)
