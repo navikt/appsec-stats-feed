@@ -1,0 +1,177 @@
+{
+    "action": "dismissed",
+    "alert": {
+      "number": 42,
+      "state": "dismissed",
+      "dependency": {
+        "package": {
+          "ecosystem": "maven",
+          "name": "commons-io:commons-io"
+        },
+        "manifest_path": "backend/settings.gradle.kts",
+        "scope": null
+      },
+      "security_advisory": {
+        "ghsa_id": "GHSA-78wr-2p64-hpwj",
+        "cve_id": "CVE-2024-47554",
+        "summary": "Apache Commons IO: Possible denial of service attack on untrusted input to XmlStreamReader",
+        "description": "Uncontrolled Resource Consumption vulnerability in Apache Commons IO.\n\nThe `org.apache.commons.io.input.XmlStreamReader` class may excessively consume CPU resources when processing maliciously crafted input.\n\n\nThis issue affects Apache Commons IO: from 2.0 before 2.14.0.\n\nUsers are recommended to upgrade to version 2.14.0 or later, which fixes the issue.",
+        "severity": "high",
+        "identifiers": [
+          {
+            "value": "GHSA-78wr-2p64-hpwj",
+            "type": "GHSA"
+          },
+          {
+            "value": "CVE-2024-47554",
+            "type": "CVE"
+          }
+        ],
+        "references": [
+          {
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-47554"
+          },
+          {
+            "url": "https://lists.apache.org/thread/6ozr91rr9cj5lm0zyhv30bsp317hk5z1"
+          },
+          {
+            "url": "https://github.com/advisories/GHSA-78wr-2p64-hpwj"
+          }
+        ],
+        "published_at": "2024-10-03T12:30:48Z",
+        "updated_at": "2024-10-03T16:52:26Z",
+        "withdrawn_at": null,
+        "vulnerabilities": [
+          {
+            "package": {
+              "ecosystem": "maven",
+              "name": "commons-io:commons-io"
+            },
+            "severity": "high",
+            "vulnerable_version_range": ">= 2.0, < 2.14.0",
+            "first_patched_version": {
+              "identifier": "2.14.0"
+            }
+          }
+        ],
+        "cvss": {
+          "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "score": 7.5
+        },
+        "cvss_severities": {
+          "cvss_v3": {
+            "vector_string": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "score": 7.5
+          },
+          "cvss_v4": {
+            "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+            "score": 8.7
+          }
+        },
+        "cwes": [
+          {
+            "cwe_id": "CWE-400",
+            "name": "Uncontrolled Resource Consumption"
+          }
+        ]
+      },
+      "security_vulnerability": {
+        "package": {
+          "ecosystem": "maven",
+          "name": "commons-io:commons-io"
+        },
+        "severity": "high",
+        "vulnerable_version_range": ">= 2.0, < 2.14.0",
+        "first_patched_version": {
+          "identifier": "2.14.0"
+        }
+      },
+      "url": "https://api.github.com/repos/navikt/kviss/dependabot/alerts/42",
+      "html_url": "https://github.com/navikt/kviss/security/dependabot/42",
+      "created_at": "2024-10-04T06:49:15Z",
+      "updated_at": "2024-11-13T07:42:54Z",
+      "dismissed_at": "2024-11-13T07:42:54Z",
+      "dismissed_by": {
+        "login": "albrektsson",
+        "id": 61695840,
+        "node_id": "MDQ6VXNlcjYxNjk1ODQw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/61695840?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/albrektsson",
+        "html_url": "https://github.com/albrektsson",
+        "followers_url": "https://api.github.com/users/albrektsson/followers",
+        "following_url": "https://api.github.com/users/albrektsson/following{/other_user}",
+        "gists_url": "https://api.github.com/users/albrektsson/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/albrektsson/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/albrektsson/subscriptions",
+        "organizations_url": "https://api.github.com/users/albrektsson/orgs",
+        "repos_url": "https://api.github.com/users/albrektsson/repos",
+        "events_url": "https://api.github.com/users/albrektsson/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/albrektsson/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "dismissed_reason": "tolerable_risk",
+      "dismissed_comment": null,
+      "fixed_at": null,
+      "auto_dismissed_at": null
+    },
+    "repository": {
+      "id": 511488234,
+      "node_id": "R_kgDOHnyw6g",
+      "name": "kviss",
+      "full_name": "navikt/kviss",
+      "private": false,
+      "owner": {
+        "login": "navikt",
+        "id": 11848947,
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjExODQ4OTQ3",
+        "avatar_url": "https://avatars.githubusercontent.com/u/11848947?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/navikt",
+        "type": "Organization",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/navikt/kviss",
+      "description": "Quiz applikasjon for internt bruk på nav",
+      "fork": false,
+      "url": "https://api.github.com/repos/navikt/kviss",
+      "homepage": null,
+      "size": 12459,
+      "stargazers_count": 1,
+      "watchers_count": 1,
+      "language": "TypeScript",
+      "has_issues": true,
+      "has_projects": false,
+      "has_downloads": true,
+      "has_wiki": false,
+      "has_pages": true,
+      "has_discussions": false,
+      "forks_count": 1,
+      "mirror_url": null,
+      "archived": false,
+      "disabled": false,
+      "open_issues_count": 0,
+      "license": {
+        "key": "mit",
+        "name": "MIT License",
+        "spdx_id": "MIT",
+        "url": "https://api.github.com/licenses/mit",
+        "node_id": "MDc6TGljZW5zZTEz"
+      },
+      "allow_forking": true,
+      "is_template": false,
+      "web_commit_signoff_required": false,
+      "topics": [
+      ],
+      "visibility": "public",
+      "forks": 1,
+      "open_issues": 0,
+      "watchers": 1,
+      "default_branch": "main",
+      "custom_properties": {
+      }
+    }
+  }
