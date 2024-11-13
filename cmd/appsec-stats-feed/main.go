@@ -17,24 +17,24 @@ import (
 )
 
 type GitHubPayload struct {
-	Action     string `json:"action"`
-	Alert      Alert  `json:"alert"`
-	Repository Repo   `json:"repository"`
+	Action     string `json:"action" bigquery:"action"`
+	Alert      Alert  `json:"alert" bigquery:"alert"`
+	Repository Repo   `json:"repository" bigquery:"repository"`
 }
 
 type Alert struct {
-	State           string       `json:"state"`
-	Severity        string       `json:"severity"`
-	CreatedAt       ISO8601Time  `json:"created_at"`
-	UpdatedAt       *ISO8601Time `json:"updated_at"`
-	DismissedAt     *ISO8601Time `json:"dismissed_at"`
-	FixedAt         *ISO8601Time `json:"fixed_at"`
-	AutoDismissedAt *ISO8601Time `json:"auto_dismissed_at"`
+	State           string       `json:"state" bigquery:"state"`
+	Severity        string       `json:"severity" bigquery:"severity"`
+	CreatedAt       ISO8601Time  `json:"created_at" bigquery:"created_at"`
+	UpdatedAt       *ISO8601Time `json:"updated_at" bigquery:"updated_at"`
+	DismissedAt     *ISO8601Time `json:"dismissed_at" bigquery:"dismissed_at"`
+	FixedAt         *ISO8601Time `json:"fixed_at" bigquery:"fixed_at"`
+	AutoDismissedAt *ISO8601Time `json:"auto_dismissed_at" bigquery:"auto_dismissed_at"`
 }
 
 type Repo struct {
-	Name     string `json:"name"`
-	Archived bool   `json:"archived"`
+	Name     string `json:"name" bigquery:"name"`
+	Archived bool   `json:"archived" bigquery:"archived"`
 }
 
 type ISO8601Time struct {
@@ -163,7 +163,7 @@ func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bi
 			{Name: "state", Type: bigquery.StringFieldType},
 			{Name: "severity", Type: bigquery.StringFieldType},
 			{Name: "created_at", Type: bigquery.TimestampFieldType},
-			{Name: "updated_at", Type: bigquery.TimestampFieldType},
+			{Name: "updated_at", Type: bigquery.TimestampFieldType, Required: false},
 			{Name: "dismissed_at", Type: bigquery.TimestampFieldType, Required: false},
 			{Name: "fixed_at", Type: bigquery.TimestampFieldType, Required: false},
 			{Name: "auto_dismissed_at", Type: bigquery.TimestampFieldType, Required: false},
@@ -199,6 +199,8 @@ func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 
 func logError(message string, err error) {
 	logEntry := map[string]interface{}{
+		"time":    time.Now().Format(time.RFC3339),
+		"level":   "error",
 		"message": message,
 		"error":   err.Error(),
 	}
