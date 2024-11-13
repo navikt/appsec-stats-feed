@@ -17,10 +17,15 @@ import (
 )
 
 type GitHubPayload struct {
-	Action     string `json:"action" bigquery:"action"`
-	Event      string `json:"event" bigquery:"event"`
-	Alert      Alert  `json:"alert" bigquery:"alert"`
-	Repository Repo   `json:"repository" bigquery:"repository"`
+	Action                string                `json:"action" bigquery:"action"`
+	Event                 string                `json:"event" bigquery:"event"`
+	Alert                 Alert                 `json:"alert" bigquery:"alert"`
+	Repository            Repo                  `json:"repository" bigquery:"repository"`
+	SecurityVulnerability SecurityVulnerability `json:"security_vulnerability" bigquery:"security_vulnerability"`
+}
+
+type SecurityVulnerability struct {
+	Severity string `json:"severity" bigquery:"severity"`
 }
 
 type Alert struct {
@@ -213,6 +218,9 @@ func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bi
 		{Name: "repository", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
 			{Name: "name", Type: bigquery.StringFieldType},
 			{Name: "archived", Type: bigquery.BooleanFieldType},
+		}},
+		{Name: "security_vulnerability", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
+			{Name: "severity", Type: bigquery.StringFieldType},
 		}},
 	}
 
