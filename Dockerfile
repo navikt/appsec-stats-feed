@@ -9,5 +9,5 @@ RUN go build -a -installsuffix cgo -o /bin/appsec-stats-feed ./cmd/appsec-stats-
 
 FROM cgr.dev/chainguard/static:latest
 WORKDIR /app
-COPY --from=builder /bin/appsec-stats-feed /app
-ENTRYPOINT ["/app"]
+COPY --from=builder /bin/appsec-stats-feed /app/appsec-stats-feed
+ENTRYPOINT ["/app/appsec-stats-feed"]
