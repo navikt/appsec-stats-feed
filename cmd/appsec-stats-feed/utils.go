@@ -33,13 +33,13 @@ func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bi
 			{Name: "dismissed_at", Type: bigquery.TimestampFieldType, Required: false},
 			{Name: "fixed_at", Type: bigquery.TimestampFieldType, Required: false},
 			{Name: "auto_dismissed_at", Type: bigquery.TimestampFieldType, Required: false},
+			{Name: "security_vulnerability", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
+				{Name: "severity", Type: bigquery.StringFieldType},
+			}},
 		}},
 		{Name: "repository", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
 			{Name: "name", Type: bigquery.StringFieldType},
 			{Name: "archived", Type: bigquery.BooleanFieldType},
-		}},
-		{Name: "security_vulnerability", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
-			{Name: "severity", Type: bigquery.StringFieldType},
 		}},
 	}
 
