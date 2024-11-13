@@ -23,13 +23,13 @@ type GitHubPayload struct {
 }
 
 type Alert struct {
-	State           string     `json:"state" bigquery:"state"`
-	Severity        string     `json:"severity" bigquery:"severity"`
-	CreatedAt       time.Time  `json:"created_at" bigquery:"created_at"`
-	UpdatedAt       *time.Time `json:"updated_at" bigquery:"updated_at"`
-	DismissedAt     *time.Time `json:"dismissed_at" bigquery:"dismissed_at"`
-	FixedAt         *time.Time `json:"fixed_at" bigquery:"fixed_at"`
-	AutoDismissedAt *time.Time `json:"auto_dismissed_at" bigquery:"auto_dismissed_at"`
+	State           string                 `json:"state" bigquery:"state"`
+	Severity        string                 `json:"severity" bigquery:"severity"`
+	CreatedAt       bigquery.NullTimestamp `json:"created_at" bigquery:"created_at"`
+	UpdatedAt       bigquery.NullTimestamp `json:"updated_at" bigquery:"updated_at"`
+	DismissedAt     bigquery.NullTimestamp `json:"dismissed_at" bigquery:"dismissed_at"`
+	FixedAt         bigquery.NullTimestamp `json:"fixed_at" bigquery:"fixed_at"`
+	AutoDismissedAt bigquery.NullTimestamp `json:"auto_dismissed_at" bigquery:"auto_dismissed_at"`
 }
 
 type Repo struct {
@@ -55,43 +55,47 @@ func (a *Alert) UnmarshalJSON(data []byte) error {
 	}
 
 	var err error
-	a.CreatedAt, err = parseTime(aux.CreatedAt)
+	a.CreatedAt, err = parseNullTimestamp(aux.CreatedAt)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing created_at: %v", err)
 	}
-	a.UpdatedAt, err = parseNullableTime(aux.UpdatedAt)
+	a.UpdatedAt, err = parseNullableNullTimestamp(aux.UpdatedAt)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing updated_at: %v", err)
 	}
-	a.DismissedAt, err = parseNullableTime(aux.DismissedAt)
+	a.DismissedAt, err = parseNullableNullTimestamp(aux.DismissedAt)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing dismissed_at: %v", err)
 	}
-	a.FixedAt, err = parseNullableTime(aux.FixedAt)
+	a.FixedAt, err = parseNullableNullTimestamp(aux.FixedAt)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing fixed_at: %v", err)
 	}
-	a.AutoDismissedAt, err = parseNullableTime(aux.AutoDismissedAt)
+	a.AutoDismissedAt, err = parseNullableNullTimestamp(aux.AutoDismissedAt)
 	if err != nil {
-		return err
+		return fmt.Errorf("error parsing auto_dismissed_at: %v", err)
 	}
 
 	return nil
 }
 
-func parseTime(s string) (time.Time, error) {
-	return time.Parse(time.RFC3339, s)
+func parseNullTimestamp(s string) (bigquery.NullTimestamp, error) {
+	t, err := time.Parse(time.RFC3339, s)
+	if err != nil {
+		return bigquery.NullTimestamp{}, err
+	}
+	return bigquery.NullTimestamp{Timestamp: t, Valid: true}, nil
 }
 
-func parseNullableTime(s *string) (*time.Time, error) {
+func parseNullableNullTimestamp(s *string) (bigquery.NullTimestamp, error) {
 	if s == nil || *s == "" {
-		return nil, nil
+		return bigquery.NullTimestamp{Valid: false}, nil
 	}
 	t, err := time.Parse(time.RFC3339, *s)
 	if err != nil {
-		return nil, err
+		return bigquery.NullTimestamp{}, err
 	}
-	return &t, nil
+	return bigquery.NullTimestamp{Timestamp: t, Valid: true}, nil
 }
 
 const (
