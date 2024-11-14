@@ -27,6 +27,7 @@ func createTableIfNotExists(ctx context.Context, bqClient *bigquery.Client) (*bi
 		{Name: "event", Type: bigquery.StringFieldType},
 		{Name: "alert", Type: bigquery.RecordFieldType, Schema: bigquery.Schema{
 			{Name: "state", Type: bigquery.StringFieldType},
+			{Name: "number", Type: bigquery.StringFieldType},
 			{Name: "created_at", Type: bigquery.TimestampFieldType},
 			{Name: "updated_at", Type: bigquery.TimestampFieldType},
 			{Name: "dismissed_at", Type: bigquery.TimestampFieldType},

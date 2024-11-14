@@ -16,6 +16,7 @@ type GitHubPayload struct {
 }
 
 type Alert struct {
+	Number                string                 `json:"number" bigquery:"number"`
 	State                 string                 `json:"state" bigquery:"state"`
 	SecurityVulnerability SecurityVulnerability  `json:"security_vulnerability" bigquery:"security_vulnerability"`
 	CreatedAt             bigquery.NullTimestamp `json:"created_at" bigquery:"created_at"`
