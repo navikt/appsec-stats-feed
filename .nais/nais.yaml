@@ -17,11 +17,10 @@ spec:
     cpuThresholdPercentage: 90
   resources:
     limits:
-      cpu: "300m"
-      memory: "512Mi"
+      memory: "64Mi"
     requests:
       cpu: "100m"
-      memory: "128Mi"
+      memory: "32Mi"
   liveness:
     initialDelay: 30
     path: isalive
