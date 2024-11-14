@@ -42,6 +42,12 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Ignore events that arent dependabot or code_scanning alerts
+	//if m.Event != "dependabot_alert" || m.Action != "code_scanning_alert" {
+	//	http.Error(w, "Invalid event or action", http.StatusBadRequest)
+	//	return
+	//}
+
 	// Set the Event field from the X-GitHub-Event header
 	m.Event = r.Header.Get("X-GitHub-Event")
 
