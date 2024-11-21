@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -58,7 +57,6 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Received and inserted message: %+v\n", m)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Message received and inserted"))
 }

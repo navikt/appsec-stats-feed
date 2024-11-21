@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 
@@ -42,7 +41,6 @@ func main() {
 	http.HandleFunc("/isalive", healthCheckHandler)
 
 	http.HandleFunc("/collect", postHandler)
-	fmt.Println("Server is listening on port 8080...")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		panic(err)
 	}
