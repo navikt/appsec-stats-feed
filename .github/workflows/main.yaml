@@ -25,7 +25,7 @@ jobs:
           pull: true
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-      - uses: nais/deploy/actions/deploy@107627e2046c4299a7203c6de50a239d5dd69f04 # ratchet:nais/deploy/actions/deploy@v2
+      - uses: nais/deploy/actions/deploy@3dc4790fabf7d7d32d45dc216e82b4254b75f379 # ratchet:nais/deploy/actions/deploy@v2
         env:
           RESOURCE: .nais/nais.yaml
           CLUSTER: prod-gcp
