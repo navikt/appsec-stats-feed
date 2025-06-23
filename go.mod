@@ -6,7 +6,7 @@ toolchain go1.24.1
 
 require (
 	cloud.google.com/go/bigquery v1.69.0
-	google.golang.org/api v0.237.0
+	google.golang.org/api v0.238.0
 )
 
 require (
