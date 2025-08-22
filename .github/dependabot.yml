@@ -1,7 +1,7 @@
 version: 2
 
-appsec-stats-feed:
-  infrastructure:
+multi-ecosystem-groups:
+  appsec-stats-feed:
     schedule:
       interval: "weekly"
     cooldown:
