@@ -4,14 +4,28 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    groups:
+      go:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 7
+    multi-ecosystem-group: "appsec-stats-feed"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 7
+    multi-ecosystem-group: "appsec-stats-feed"
+
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    multi-ecosystem-group: "appsec-stats-feed"
