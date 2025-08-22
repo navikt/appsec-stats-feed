@@ -1,31 +1,24 @@
 version: 2
+
+appsec-stats-feed:
+  infrastructure:
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 3
+
 updates:
   - package-ecosystem: "gomod"
     directory: "/"
-    schedule:
-      interval: "weekly"
-    groups:
-      go:
-        patterns:
-          - "*"
-    cooldown:
-      default-days: 7
+    patterns: ["*"]
     multi-ecosystem-group: "appsec-stats-feed"
 
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:
-      interval: "weekly"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
-    cooldown:
-      default-days: 7
+    patterns: ["*"]
     multi-ecosystem-group: "appsec-stats-feed"
 
   - package-ecosystem: "docker"
     directory: "/"
-    schedule:
-      interval: "weekly"
+    patterns: ["*"]
     multi-ecosystem-group: "appsec-stats-feed"
