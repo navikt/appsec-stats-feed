@@ -5,19 +5,15 @@ multi-ecosystem-groups:
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 3
+      default-days: 7
 
 updates:
   - package-ecosystem: "gomod"
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "appsec-stats-feed"
-    cooldown:
-      default-days: 7
 
   - package-ecosystem: "github-actions"
     directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "appsec-stats-feed"
-    cooldown:
-      default-days: 7
