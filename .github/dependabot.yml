@@ -21,10 +21,3 @@ updates:
     multi-ecosystem-group: "appsec-stats-feed"
     cooldown:
       default-days: 7
-
-  - package-ecosystem: "docker"
-    directory: "/"
-    patterns: ["*"]
-    multi-ecosystem-group: "appsec-stats-feed"
-    cooldown:
-      default-days: 7
