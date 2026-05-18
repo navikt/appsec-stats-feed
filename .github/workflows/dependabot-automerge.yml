@@ -1,21 +1,21 @@
-name: Dependabot auto-merge
-on: pull_request
+name: Automerge Dependabot PRs
 
-permissions:
-  contents: write
-  pull-requests: write
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
 
 jobs:
-  dependabot:
+  automerge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: read
+      statuses: read
     steps:
-      - uses: dependabot/fetch-metadata@v3
-        id: metadata
-      - name: Auto-merge dependabot PRs
-        if: |
-          steps.metadata.outputs.update-type != 'version-update:semver-major'
-        run: gh pr merge --auto --squash "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{github.token}}
+      - name: Automerge Dependabot PRs
+        uses: navikt/automerge-dependabot@v1.5
+        with:
+          token: ${{ github.token }}
+          merge-method: squash
