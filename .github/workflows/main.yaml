@@ -13,16 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod-gcp:appsec
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # ratchet:actions/checkout@v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # ratchet:actions/checkout@v4
         with:
           persist-credentials: false
-      - uses: nais/docker-build-push@cd5ec5663feb0e05c3fa374d1fb442605b046c6b # ratchet:nais/docker-build-push@v0
+      - uses: nais/docker-build-push@05dbb6091b30bd84279c6d64a45ef8782fd410a5 # ratchet:nais/docker-build-push@v0
         id: docker-push
         with:
           team: appsec
           push_image: true
           pull: true
-      - uses: nais/deploy/actions/deploy@fa754451577294aae42872a69b888b3470478ec1 # ratchet:nais/deploy/actions/deploy@v2
+      - uses: nais/deploy/actions/deploy@c55d6073d913975d2dada508bdfefc6427d39867 # ratchet:nais/deploy/actions/deploy@v2
         env:
           RESOURCE: .nais/nais.yaml
           CLUSTER: prod-gcp
