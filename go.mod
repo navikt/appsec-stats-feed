@@ -4,7 +4,7 @@ go 1.25.8
 
 require (
 	cloud.google.com/go/bigquery v1.77.0
-	google.golang.org/api v0.281.0
+	google.golang.org/api v0.283.0
 )
 
 require (
