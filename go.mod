@@ -1,6 +1,6 @@
 module github.com/navikt/appsec-stats-feed
 
-go 1.26.6
+go 1.27
 
 require (
 	cloud.google.com/go/bigquery v1.83.0
